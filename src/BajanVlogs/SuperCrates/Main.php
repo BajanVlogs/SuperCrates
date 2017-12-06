@@ -35,9 +35,9 @@ use pocketmine\level\sound\PopSound;
 class Main extends PluginBase implements Listener {
 	public $Crate = [];
 	public $locations = [
-		"Voting"    => "-69:118:-54",
-		"Elite"     => "-69:118:-44",
-		"Legendary" => "-69:118:-49",
+		"Voting"    => "0:0:0",
+		"Elite"     => "0:0:0",
+		"Legendary" => "0:0:0",
 	];
 
 	/** @var Config */
