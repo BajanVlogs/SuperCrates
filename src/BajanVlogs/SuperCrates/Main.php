@@ -1,6 +1,6 @@
 <?php
 
-namespace Daniktheboss\SuperCrates;
+namespace BajanVlogs\SuperCrates;
 
 use pocketmine\event\Listener;
 use pocketmine\plugin\PluginBase;
