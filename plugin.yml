@@ -1,0 +1,12 @@
+name: SuperCrates
+main: BajanVlogs\SuperCrates\Main
+version: 0.0.1
+api: 3.0.0-ALPHA9, 3.0.0-ALPHA10
+author: Daniktheboss
+description: Custom crates that will make your server better
+
+commands:
+  givekey:
+    description: Give key to player
+  setcrate:
+    description: Set the location a block
