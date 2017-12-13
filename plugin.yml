@@ -1,6 +1,6 @@
 name: SuperCrates
 main: BajanVlogs\SuperCrates\Main
-version: 0.0.1
+version: 0.0.2
 api: 3.0.0-ALPHA9, 3.0.0-ALPHA10, 3.0.0ALPHA11
 load: POSTWORLD
 author: BajanVlogs
