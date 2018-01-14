@@ -20,6 +20,7 @@ use pocketmine\nbt\tag\{
 	CompoundTag, StringTag
 };
 use pocketmine\item\enchantment\Enchantment;
+use pocketmine\item\enchantment\EnchantmentInstance;
 
 use pocketmine\event\player\{
 	PlayerInteractEvent, PlayerJoinEvent
@@ -96,7 +97,7 @@ class Main extends PluginBase implements Listener {
 		}
 		if(isset($elvl)) $level = $elvl;
 		if(isset($enchantment)){
-			$item->addEnchantment($enchantment->setLevel((int)$level));
+			$item->addEnchantment($enchantment->new EnchantmentInstance($ench, (int) $name_level)); 
 		}
 		if(isset($customname)) $item->setCustomName(TF::RESET . $customname);
 
