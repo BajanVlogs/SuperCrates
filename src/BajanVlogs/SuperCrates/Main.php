@@ -38,7 +38,7 @@ class Main extends PluginBase implements Listener {
 		"Voting"    => "-69:118:-54",
 		"Elite"     => "-69:118:-44",
 		"Legendary" => "-69:118:-49",
-		"God" => "-69:118:-49",
+		"God" 	    => "-69:118:-39",
 	];
 
 	/** @var Config */
