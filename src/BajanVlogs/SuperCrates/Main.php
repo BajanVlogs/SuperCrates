@@ -97,7 +97,7 @@ class Main extends PluginBase implements Listener {
 		}
 		if(isset($elvl)) $level = $elvl;
 		if(isset($enchantment)){
-			$item->addEnchantment($enchantment->new EnchantmentInstance($ench, (int) $name_level)); 
+			$item->addEnchantment($enchantment->setLevel((int)$level)); 
 		}
 		if(isset($customname)) $item->setCustomName(TF::RESET . $customname);
 
