@@ -1,7 +1,7 @@
 name: SuperCrates
 main: BajanVlogs\SuperCrates\Main
 version: 0.0.2
-api: 3.0.0-ALPHA9, 3.0.0-ALPHA10, 3.0.0ALPHA11
+api: 3.0.0-ALPHA9, 3.0.0-ALPHA10, 3.0.0-ALPHA11
 load: POSTWORLD
 author: BajanVlogs
 description: Custom crates that will make your server better
