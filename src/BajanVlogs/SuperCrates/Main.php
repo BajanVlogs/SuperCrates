@@ -49,6 +49,7 @@ class Main extends PluginBase implements Listener {
 		$this->items = new Config($this->getDataFolder() . 'Items.yml', Config::YAML);
 		$this->getServer()->getPluginManager()->registerEvents($this, $this);
                 $this->saveResource("Items.yml");
+		$this->loadResource("Items.yml");
 	}
 
 	public function PlayerJoinEvent(PlayerJoinEvent $event){
