@@ -39,7 +39,6 @@ class Main extends PluginBase implements Listener {
 		"Voting"    => "-69:118:-54",
 		"Elite"     => "-69:118:-44",
 		"Legendary" => "-69:118:-49",
-		"God" 	    => "-69:118:-39",
 	];
 
 	/** @var Config */
@@ -280,8 +279,6 @@ class Main extends PluginBase implements Listener {
 				return "Elite";
 			case 2:
 				return "Legendary";
-			case 3:
-				return "God";
 		}
 		return "null";
 	}
@@ -294,8 +291,6 @@ class Main extends PluginBase implements Listener {
 				return 1;
 			case "Legendary":
 				return 2;
-			case "God":
-				return 3;
 		}
 		return "null";
 	}
