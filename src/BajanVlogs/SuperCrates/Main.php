@@ -16,9 +16,9 @@ use pocketmine\command\Command;
 use pocketmine\block\Block;
 use pocketmine\item\Item;
 //use pocketmine\entity\Item as ItemEntity;
-use pocketmine\nbt\tag\{
-	CompoundTag, StringTag
-};
+use pocketmine\nbt\tag\NamedTag;
+use pocketmine\nbt\tag\StringTag
+
 use pocketmine\item\enchantment\Enchantment;
 use pocketmine\item\enchantment\EnchantmentInstance;
 
