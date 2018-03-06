@@ -17,7 +17,8 @@ use pocketmine\block\Block;
 use pocketmine\item\Item;
 //use pocketmine\entity\Item as ItemEntity;
 use pocketmine\nbt\tag\NamedTag;
-use pocketmine\nbt\tag\StringTag
+use pocketmine\nbt\tag\StringTag;
+use pocketmine\nbt\tag\CompoundTag;
 
 use pocketmine\item\enchantment\Enchantment;
 use pocketmine\item\enchantment\EnchantmentInstance;
@@ -26,7 +27,7 @@ use pocketmine\event\player\{
 	PlayerInteractEvent, PlayerJoinEvent
 };
 use pocketmine\network\mcpe\protocol\{
-	AddItemEntityPacket/*, BlockEventPacket*/, RemoveEntityPacket
+	AddItemEntityPacket, BlockEventPacket, RemoveEntityPacket
 };
 use pocketmine\entity\Entity;
 use pocketmine\network\mcpe\protocol\AddPlayerPacket;
@@ -55,7 +56,7 @@ class Main extends PluginBase implements Listener {
 		$player = $event->getPlayer();
 		foreach($this->locations as $crate => $xyz){
 			$xyz = explode(":", $xyz);
-			//$cpos = new Vector3($xyz[0], $xyz[1], $xyz[2]);
+			$cpos = new Vector3($xyz[0], $xyz[1], $xyz[2]);
 			$pk = new AddPlayerPacket();
 			$pk->uuid = UUID::fromRandom();
 			$pk->username = "Chest";
@@ -139,15 +140,15 @@ class Main extends PluginBase implements Listener {
 	}
 
 	public function closeChest(Block $chest){
-		//$pk = new BlockEventPacket();
-		//$pk->x = $chest->getX();
-		//$pk->y = $chest->getY();
-		//$pk->z = $chest->getZ();
-		//$pk->case1 = 1;
-		//$pk->case2 = 0;
-		//foreach($this->getServer()->getOnlinePlayers() as $player){
-		//	$player->dataPacket($pk);
-		//}
+		$pk = new BlockEventPacket();
+		$pk->x = $chest->getX();
+		$pk->y = $chest->getY();
+		$pk->z = $chest->getZ();
+		$pk->case1 = 1;
+		$pk->case2 = 0;
+		foreach($this->getServer()->getOnlinePlayers() as $player){
+			$player->dataPacket($pk);
+		}
 		unset($this->Crate[$chest->x . $chest->z . "ITEM"]);
 		unset($this->Crate[$chest->x . $chest->z . "TEXT"]);
 
@@ -173,21 +174,21 @@ class Main extends PluginBase implements Listener {
 	public function spawnItem(Block $block, $items = null){
 		$block->getLevel()->addSound(new PopSound($block));
 		$item = $items;
-		//$pk = new BlockEventPacket();
-		//$pk->x = $block->getX();
-		//$pk->y = $block->getY();
-		//$pk->z = $block->getZ();
-		//$pk->case1 = 1;
-		//$pk->case2 = 2;
-		//foreach($this->getServer()->getOnlinePlayers() as $player){
-		//	$player->dataPacket($pk);
-		//}
+		$pk = new BlockEventPacket();
+		$pk->x = $block->getX();
+		$pk->y = $block->getY();
+		$pk->z = $block->getZ();
+		$pk->case1 = 1;
+		$pk->case2 = 2;
+		foreach($this->getServer()->getOnlinePlayers() as $player){
+			$player->dataPacket($pk);
+		}
 		if($items == null) $item = $this->randomItem();
 		if($items == null) $item->setCustomName(TF::YELLOW . "? " . $item->getName() . TF::YELLOW . " ?");
 		$pk = new AddItemEntityPacket();
 		$pk->entityRuntimeId = Entity::$entityCount++;
 		$id = $pk->entityRuntimeId;
-		//$pk->type = ItemEntity::NETWORK_ID;
+		$pk->type = ItemEntity::NETWORK_ID;
 		$pk->position = new Vector3($block->x + .5, $block->y + 1, $block->z + .5);
 		$pk->item = $item;
 		$pk->motion = new Vector3(0,0,0);
@@ -297,8 +298,8 @@ class Main extends PluginBase implements Listener {
 
 	public function giveKey(Player $player, int $key, int $amount = 1){
 		$item = Item::get(340, 0, $amount);
-		//$enchant = Enchantment::getEnchantment(-1);
-		//$item->addEnchantment($enchant);
+		$enchant = Enchantment::getEnchantment(-1);
+		$item->addEnchantment($enchant);
 		$keyname = $this->keys($key);
 		$keyn = TF::WHITE . TF::OBFUSCATED . "||||" . TF::RESET . TF::GREEN . TF::BOLD . "$keyname Charm" . TF::RESET . TF::WHITE . TF::OBFUSCATED . "||||" . TF::RESET;
 		$item->setCustomName(TF::RESET . $keyn);
