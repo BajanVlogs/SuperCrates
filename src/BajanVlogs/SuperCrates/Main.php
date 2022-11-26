@@ -30,7 +30,7 @@ use pocketmine\network\mcpe\protocol\{
 	AddItemEntityPacket, BlockEventPacket, RemoveEntityPacket
 };
 use pocketmine\entity\Entity;
-use pocketmine\network\mcpe\protocol\AddPlayerPacket;
+use pocketmine\network\mcpe\handler\PacketHandler;
 
 use pocketmine\level\sound\PopSound;
 
