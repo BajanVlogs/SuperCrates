@@ -1,18 +1,14 @@
-<?php
-
 namespace BajanVlogs\SuperCrates;
 
 use pocketmine\event\Listener;
 use pocketmine\plugin\PluginBase;
 use pocketmine\Player;
 use pocketmine\utils\Config;
-
 use pocketmine\utils\UUID;
 use pocketmine\utils\TextFormat as TF;
 use pocketmine\math\Vector3;
 use pocketmine\command\CommandSender;
 use pocketmine\command\Command;
-
 use pocketmine\block\Block;
 use pocketmine\item\Item;
 use pocketmine\item\enchantment\Enchantment;
@@ -24,6 +20,7 @@ use pocketmine\network\mcpe\protocol\BlockEventPacket;
 use pocketmine\network\mcpe\protocol\RemoveEntityPacket;
 use pocketmine\level\sound\PopSound;
 use pocketmine\entity\Entity;
+use pocketmine\level\particle\InkParticle;
 
 class Main extends PluginBase implements Listener {
 
@@ -107,14 +104,39 @@ class Main extends PluginBase implements Listener {
         return true;
     }
 
-    // Other methods...
-
     public function onPlayerInteract(PlayerInteractEvent $event) {
-        // Your existing code for player interactions...
+        $player = $event->getPlayer();
+        $block = $event->getBlock();
+
+        foreach ($this->locations as $crate => $xyz) {
+            $xyz = explode(":", $xyz);
+            $cpos = new Vector3($xyz[0], $xyz[1], $xyz[2]);
+
+            if ($block->equals($cpos->floor())) {
+                $this->despawnCrate($cpos);
+                $item = $this->randomItem($crate);
+                $player->getInventory()->addItem($item);
+
+                // Add particle effects
+                $this->splashParticles($player);
+
+                $player->getLevel()->addSound(new PopSound($player->asVector3()));
+                $event->setCancelled();
+            }
+        }
+    }
+
+    private function splashParticles(Player $player) {
+        $pk = new BlockEventPacket();
+        $pk->x = (int)$player->x;
+        $pk->y = (int)$player->y;
+        $pk->z = (int)$player->z;
+        $pk->case1 = 2000; // Bonemeal particles
+        $pk->case2 = 0;
+        $player->sendDataPacket($pk);
     }
 
     public function onCommand(CommandSender $player, Command $command, string $label, array $args): bool {
         // Your existing code for command handling...
     }
 }
-
