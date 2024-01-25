@@ -1,14 +1,33 @@
 # SuperCrates
-This Crate plugin is one of the best crate plugins out there
 
+This Crate plugin is one of the best crate plugins out there.
 
-Format for Items.yml is
+## Updates
+- Updated to the latest PocketMine API.
+- New features added:
+  - A sound plays when you win a crate.
+  - Exciting particle effects accompany your victory.
+
+## Format for `Items.yml`
+
 ID:Damage:Amount:Enchant:Level
 
-Edit Crate Location in the Main.php or by doing /setcrate
+## Edit Crate Location
+- Adjust the crate locations in the `Main.php` file or by using the command `/setcrate`.
 
-Cratekey command
+## Crate Key Commands
+- Give a common crate key:
 
-givekey {player} 1 1
-givekey {player} 2 1
-givekey {player} 3 1
+- givekey {player} 1 1
+
+- Give an elite crate key:
+
+- givekey {player} 2 1
+
+- Give a legendary crate key:
+
+- givekey {player} 3 1
+
+- Feel free to explore and enjoy the enhanced features of SuperCrates
+
+- Feel free to customize the content based on your specific changes or preferences.
