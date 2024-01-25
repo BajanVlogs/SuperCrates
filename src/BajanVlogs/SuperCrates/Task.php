@@ -6,7 +6,7 @@ use pocketmine\utils\TextFormat as TF;
 use pocketmine\scheduler\PluginTask;
 use pocketmine\block\Block;
 use pocketmine\Player;
-use pocketmine\item\Item; // Add the missing import
+use pocketmine\item\Item;
 use pocketmine\level\sound\BlazeShootSound;
 
 class Task extends PluginTask {
