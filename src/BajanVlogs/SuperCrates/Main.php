@@ -146,4 +146,18 @@ class Main extends PluginBase implements Listener {
             }
             
             $player = $this->getServer()->getPlayer($args[0]);
-            if (!$player instanceof
+            if (!$player instanceof Player) {
+                $sender->sendMessage(TF::RED . "Player not found");
+                return false;
+            }
+            
+            $key = (int) $args[1];
+            $amount = (int) $args[2];
+            $keyItem = Item::get($key, 0, $amount);
+            $player->getInventory()->addItem($keyItem);
+            $sender->sendMessage(TF::GREEN . "Given $amount of key $key to " . $player->getName());
+            return true;
+        }
+        return false;
+    }
+}
