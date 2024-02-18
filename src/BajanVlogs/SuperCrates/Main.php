@@ -1,3 +1,5 @@
+<?php
+
 namespace BajanVlogs\SuperCrates;
 
 use pocketmine\event\Listener;
@@ -136,7 +138,12 @@ class Main extends PluginBase implements Listener {
         $player->sendDataPacket($pk);
     }
 
-    public function onCommand(CommandSender $player, Command $command, string $label, array $args): bool {
-        // Your existing code for command handling...
-    }
-}
+    public function onCommand(CommandSender $sender, Command $command, string $label, array $args): bool {
+        if ($command->getName() === "givekey") {
+            if (count($args) !== 3) {
+                $sender->sendMessage(TF::RED . "Usage: /givekey {player} {key} {amount}");
+                return false;
+            }
+            
+            $player = $this->getServer()->getPlayer($args[0]);
+            if (!$player instanceof
