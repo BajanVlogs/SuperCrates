@@ -2,14 +2,14 @@
 
 namespace BajanVlogs\SuperCrates;
 
+use pocketmine\scheduler\Task;
 use pocketmine\utils\TextFormat as TF;
-use pocketmine\scheduler\PluginTask;
 use pocketmine\block\Block;
 use pocketmine\Player;
 use pocketmine\item\Item;
 use pocketmine\level\sound\BlazeShootSound;
 
-class Task extends PluginTask {
+class Task extends Task {
     /** @var Main */
     private $plugin;
     /** @var Block */
@@ -20,7 +20,6 @@ class Task extends PluginTask {
     private $player;
 
     public function __construct(Main $plugin, Block $block, Item $item, Player $player) {
-        parent::__construct($plugin);
         $this->plugin = $plugin;
         $this->block = $block;
         $this->item = $item;
@@ -52,7 +51,7 @@ class Task extends PluginTask {
                 $api->closeChest($this->block);
                 $api->getChestReady($this->block);
                 unset($this->plugin->chest[$chestId]);
-                $this->plugin->getScheduler()->cancelTask($this->getTaskId());
+                $this->getHandler()->cancel();
                 break;
 
             case 45:
@@ -81,9 +80,8 @@ class Task extends PluginTask {
     }
 
     private function resetChest(int $time) {
-        $this->plugin->getScheduler()->cancelTask($this->getTaskId());
         $task = new Task($this->plugin, $this->block, $this->item, $this->player);
-        $this->plugin->getScheduler()->scheduleRepeatingTask($task, $time);
+        $this->getHandler()->getScheduler()->scheduleRepeatingTask($task, $time);
         return true;
     }
 }
