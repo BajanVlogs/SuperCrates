@@ -9,7 +9,7 @@ use pocketmine\Player;
 use pocketmine\item\Item;
 use pocketmine\level\sound\BlazeShootSound;
 
-class Task extends Task {
+class SuperCratesTask extends Task {
     /** @var Main */
     private $plugin;
     /** @var Block */
@@ -80,7 +80,7 @@ class Task extends Task {
     }
 
     private function resetChest(int $time) {
-        $task = new Task($this->plugin, $this->block, $this->item, $this->player);
+        $task = new SuperCratesTask($this->plugin, $this->block, $this->item, $this->player);
         $this->getHandler()->getScheduler()->scheduleRepeatingTask($task, $time);
         return true;
     }
