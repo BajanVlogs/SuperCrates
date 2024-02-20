@@ -1,13 +1,14 @@
 name: SuperCrates
-main: BajanVlogs\SuperCrates\Main
-version: 0.0.3
-api: [5.0.0]
-load: POSTWORLD
+version: 1.0.0
+api: 5.0.0
 author: BajanVlogs
-description: Custom crates that will make your server better
-
+main: BajanVlogs\SuperCrates\Main
 commands:
   givekey:
-    description: Give key to player
-  setcrate:
-    description: Set the location a block
+    description: "Give a key to a player"
+    usage: "/givekey <player> <key id> [amount]"
+    permission: "supercrates.givekey"
+permissions:
+  supercrates.givekey:
+    description: "Allows players to give keys to other players"
+    default: op
