@@ -16,7 +16,7 @@ use pocketmine\utils\Config;
 use pocketmine\utils\TextFormat as TF;
 use pocketmine\utils\UUID;
 use pocketmine\math\Vector3;
-use pocketmine\Player; // Ensure this is the correct namespace for Player
+use pocketmine\player\Player; // Ensure this is the correct namespace for Player
 
 class Main extends PluginBase implements Listener {
     public $Crate = [];
