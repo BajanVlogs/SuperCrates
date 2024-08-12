@@ -9,7 +9,7 @@ use pocketmine\block\Block;
 use pocketmine\player\Player;
 use pocketmine\world\sound\BlazeShootSound;
 
-class Task extends PluginTask {
+class CrateTask extends Task {
     public $plugin;
     public $block;
     public $item;
@@ -23,37 +23,40 @@ class Task extends PluginTask {
     }
 
     public function onRun(): void {
-        if (!isset($this->plugin->chest[$this->block->getPosition()->getX() . $this->block->getPosition()->getZ()])) {
-            $this->plugin->chest[$this->block->getPosition()->getX() . $this->block->getPosition()->getZ()] = 0;
+        $blockPos = $this->block->getPosition();
+        $blockKey = $blockPos->getX() . $blockPos->getZ();
+
+        if (!isset($this->plugin->chest[$blockKey])) {
+            $this->plugin->chest[$blockKey] = 0;
         }
-        $this->plugin->chest[$this->block->getPosition()->getX() . $this->block->getPosition()->getZ()]++;
+
+        $this->plugin->chest[$blockKey]++;
         $api = $this->plugin;
 
-        if ($this->plugin->chest[$this->block->getPosition()->getX() . $this->block->getPosition()->getZ()] > 45 && 
-            $this->plugin->chest[$this->block->getPosition()->getX() . $this->block->getPosition()->getZ()] < 47) {
+        if ($this->plugin->chest[$blockKey] > 45 && $this->plugin->chest[$blockKey] < 47) {
             return;
         }
 
-        if ($this->plugin->chest[$this->block->getPosition()->getX() . $this->block->getPosition()->getZ()] == 47) {
+        if ($this->plugin->chest[$blockKey] == 47) {
             $this->player->sendMessage(TF::GREEN . "You have won " . TF::GOLD . $this->item->getName() . TF::GREEN . " from the crate!");
             $this->player->getInventory()->addItem($this->item);
             return;
         }
 
-        if ($this->plugin->chest[$this->block->getPosition()->getX() . $this->block->getPosition()->getZ()] == 48) {
+        if ($this->plugin->chest[$blockKey] == 48) {
             $api->despawnItem($this->block);
             $api->closeChest($this->block);
             $api->getChestReady($this->block);
-            unset($this->plugin->chest[$this->block->getPosition()->getX() . $this->block->getPosition()->getZ()]);
+            unset($this->plugin->chest[$blockKey]);
             $this->plugin->getScheduler()->cancelTask($this->getTaskId());
             return;
         }
 
-        if ($this->plugin->chest[$this->block->getPosition()->getX() . $this->block->getPosition()->getZ()] == 45) {
+        if ($this->plugin->chest[$blockKey] == 45) {
             $api->despawnItem($this->block);
             $api->closeChest($this->block);
             $item = Item::get($this->item->getId(), 0, 1);
-            $this->block->getPosition()->getWorld()->addSound($this->block->getPosition(), new BlazeShootSound());
+            $blockPos->getWorld()->addSound($blockPos, new BlazeShootSound());
             $item->setCustomName(TF::GREEN . ">> " . TF::GOLD . $item->getName() . TF::GREEN . " <<");
             $api->spawnItem($this->block, $item);
             return;
@@ -61,19 +64,19 @@ class Task extends PluginTask {
 
         $api->despawnItem($this->block);
 
-        if ($this->plugin->chest[$this->block->getPosition()->getX() . $this->block->getPosition()->getZ()] == 25) {
+        if ($this->plugin->chest[$blockKey] == 25) {
             $this->resetChest(8);
         }
-        if ($this->plugin->chest[$this->block->getPosition()->getX() . $this->block->getPosition()->getZ()] == 35) {
+        if ($this->plugin->chest[$blockKey] == 35) {
             $this->resetChest(10);
         }
-        if ($this->plugin->chest[$this->block->getPosition()->getX() . $this->block->getPosition()->getZ()] == 38) {
+        if ($this->plugin->chest[$blockKey] == 38) {
             $this->resetChest(13);
         }
-        if ($this->plugin->chest[$this->block->getPosition()->getX() . $this->block->getPosition()->getZ()] == 40) {
+        if ($this->plugin->chest[$blockKey] == 40) {
             $this->resetChest(16);
         }
-        if ($this->plugin->chest[$this->block->getPosition()->getX() . $this->block->getPosition()->getZ()] == 43) {
+        if ($this->plugin->chest[$blockKey] == 43) {
             $this->resetChest(20);
         }
 
@@ -82,7 +85,7 @@ class Task extends PluginTask {
 
     public function resetChest(int $time): void {
         $this->plugin->getScheduler()->cancelTask($this->getTaskId());
-        $task = new Task($this->plugin, $this->block, $this->item, $this->player);
+        $task = new CrateTask($this->plugin, $this->block, $this->item, $this->player);
         $this->plugin->getScheduler()->scheduleRepeatingTask($task, $time);
     }
 }
