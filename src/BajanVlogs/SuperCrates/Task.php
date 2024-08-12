@@ -2,22 +2,18 @@
 
 namespace BajanVlogs\SuperCrates;
 
-use pocketmine\scheduler\Task;
-use pocketmine\utils\TextFormat as TF;
-use pocketmine\block\Block;
-use pocketmine\Player;
 use pocketmine\item\Item;
-use pocketmine\level\sound\BlazeShootSound;
+use pocketmine\utils\TextFormat as TF;
+use pocketmine\scheduler\Task;
+use pocketmine\block\Block;
+use pocketmine\player\Player;
+use pocketmine\world\sound\BlazeShootSound;
 
-class SuperCratesTask extends Task {
-    /** @var Main */
-    private $plugin;
-    /** @var Block */
-    private $block;
-    /** @var Item */
-    private $item;
-    /** @var Player */
-    private $player;
+class Task extends Task {
+    public $plugin;
+    public $block;
+    public $item;
+    public $player;
 
     public function __construct(Main $plugin, Block $block, Item $item, Player $player) {
         $this->plugin = $plugin;
@@ -26,62 +22,67 @@ class SuperCratesTask extends Task {
         $this->player = $player;
     }
 
-    public function onRun(int $currentTick) {
-        if (!isset($this->plugin->chest[$this->block->x . $this->block->z])) {
-            $this->plugin->chest[$this->block->x . $this->block->z] = 0;
+    public function onRun(): void {
+        if (!isset($this->plugin->chest[$this->block->getPosition()->getX() . $this->block->getPosition()->getZ()])) {
+            $this->plugin->chest[$this->block->getPosition()->getX() . $this->block->getPosition()->getZ()] = 0;
         }
-        
-        $this->plugin->chest[$this->block->x . $this->block->z]++;
-
+        $this->plugin->chest[$this->block->getPosition()->getX() . $this->block->getPosition()->getZ()]++;
         $api = $this->plugin;
-        $chestId = $this->block->x . $this->block->z;
 
-        if ($this->plugin->chest[$chestId] > 45 && $this->plugin->chest[$chestId] < 47) {
+        if ($this->plugin->chest[$this->block->getPosition()->getX() . $this->block->getPosition()->getZ()] > 45 && 
+            $this->plugin->chest[$this->block->getPosition()->getX() . $this->block->getPosition()->getZ()] < 47) {
             return;
         }
 
-        switch ($this->plugin->chest[$chestId]) {
-            case 47:
-                $this->player->sendMessage(TF::GREEN . "You have won " . TF::GOLD . $this->item->getName() . TF::GREEN . " from the crate!");
-                $this->player->getInventory()->addItem($this->item);
-                break;
-
-            case 48:
-                $api->despawnItem($this->block);
-                $api->closeChest($this->block);
-                $api->getChestReady($this->block);
-                unset($this->plugin->chest[$chestId]);
-                $this->getHandler()->cancel();
-                break;
-
-            case 45:
-                $api->despawnItem($this->block);
-                $api->closeChest($this->block);
-                $prizeItem = Item::get($this->item->getId(), 0, 1);
-                $this->block->getLevel()->addSound(new BlazeShootSound($this->block));
-                $prizeItem->setCustomName(TF::GREEN . ">> " . TF::GOLD . $prizeItem->getName() . TF::GREEN . " <<");
-                $api->spawnItem($this->block, $prizeItem);
-                break;
-
-            default:
-                $api->despawnItem($this->block);
-
-                if ($this->plugin->chest[$chestId] == 25) $this->resetChest(8);
-                if ($this->plugin->chest[$chestId] == 35) $this->resetChest(10);
-                if ($this->plugin->chest[$chestId] == 38) $this->resetChest(13);
-                if ($this->plugin->chest[$chestId] == 40) $this->resetChest(16);
-                if ($this->plugin->chest[$chestId] == 43) $this->resetChest(20);
-
-                $api->spawnItem($this->block);
-                break;
+        if ($this->plugin->chest[$this->block->getPosition()->getX() . $this->block->getPosition()->getZ()] == 47) {
+            $this->player->sendMessage(TF::GREEN . "You have won " . TF::GOLD . $this->item->getName() . TF::GREEN . " from the crate!");
+            $this->player->getInventory()->addItem($this->item);
+            return;
         }
 
-        return true;
+        if ($this->plugin->chest[$this->block->getPosition()->getX() . $this->block->getPosition()->getZ()] == 48) {
+            $api->despawnItem($this->block);
+            $api->closeChest($this->block);
+            $api->getChestReady($this->block);
+            unset($this->plugin->chest[$this->block->getPosition()->getX() . $this->block->getPosition()->getZ()]);
+            $this->plugin->getScheduler()->cancelTask($this->getTaskId());
+            return;
+        }
+
+        if ($this->plugin->chest[$this->block->getPosition()->getX() . $this->block->getPosition()->getZ()] == 45) {
+            $api->despawnItem($this->block);
+            $api->closeChest($this->block);
+            $item = Item::get($this->item->getId(), 0, 1);
+            $this->block->getPosition()->getWorld()->addSound($this->block->getPosition(), new BlazeShootSound());
+            $item->setCustomName(TF::GREEN . ">> " . TF::GOLD . $item->getName() . TF::GREEN . " <<");
+            $api->spawnItem($this->block, $item);
+            return;
+        }
+
+        $api->despawnItem($this->block);
+
+        if ($this->plugin->chest[$this->block->getPosition()->getX() . $this->block->getPosition()->getZ()] == 25) {
+            $this->resetChest(8);
+        }
+        if ($this->plugin->chest[$this->block->getPosition()->getX() . $this->block->getPosition()->getZ()] == 35) {
+            $this->resetChest(10);
+        }
+        if ($this->plugin->chest[$this->block->getPosition()->getX() . $this->block->getPosition()->getZ()] == 38) {
+            $this->resetChest(13);
+        }
+        if ($this->plugin->chest[$this->block->getPosition()->getX() . $this->block->getPosition()->getZ()] == 40) {
+            $this->resetChest(16);
+        }
+        if ($this->plugin->chest[$this->block->getPosition()->getX() . $this->block->getPosition()->getZ()] == 43) {
+            $this->resetChest(20);
+        }
+
+        $api->spawnItem($this->block);
     }
 
-    private function resetChest(int $time) {
-        $task = new SuperCratesTask($this->plugin, $this->block, $this->item, $this->player);
-        $this->getHandler()->getScheduler()->scheduleRepeatingTask($task, $time);
-        return true;
+    public function resetChest(int $time): void {
+        $this->plugin->getScheduler()->cancelTask($this->getTaskId());
+        $task = new Task($this->plugin, $this->block, $this->item, $this->player);
+        $this->plugin->getScheduler()->scheduleRepeatingTask($task, $time);
     }
 }
