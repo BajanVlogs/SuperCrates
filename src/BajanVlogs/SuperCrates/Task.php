@@ -9,7 +9,7 @@ use pocketmine\block\Block;
 use pocketmine\player\Player;
 use pocketmine\world\sound\BlazeShootSound;
 
-class Task extends Task {
+class Task extends PluginTask {
     public $plugin;
     public $block;
     public $item;
